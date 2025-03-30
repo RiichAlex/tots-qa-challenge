@@ -1,0 +1,3074 @@
+{
+	"info": {
+		"_postman_id": "0ed24dc8-58b4-4536-8f49-80d27ad55edf",
+		"name": "GoRest API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43266563",
+		"_collection_link": "https://blue-firefly-140428.postman.co/workspace/Team-Workspace~b3ac16c5-394b-41cd-820d-0800ed5dd6de/collection/43266563-0ed24dc8-58b4-4536-8f49-80d27ad55edf?action=share&source=collection_link&creator=43266563"
+	},
+	"item": [
+		{
+			"name": "Crear Usuario Válido 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el cod de respuesta sea 201 \"Creado\".\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"// Validación: Verificar que el ID del usuario este presente en la respuesta.\r",
+							"pm.test(\"User ID is present\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.exist;  // El ID debe existir!\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							"\r",
+							"let responseData = pm.response.json();\r",
+							"// Guardamos el ID en la variable 'userId1' de la colección\r",
+							"pm.collectionVariables.set(\"userId1\", responseData.id);\r",
+							"\r",
+							"// Verificar en consola\r",
+							"console.log(\"Usuario creado con ID:\", responseData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Genero Random\r",
+							"const genders = [\"male\", \"female\"];\r",
+							"pm.variables.set(\"random_gender\", genders[Math.floor(Math.random() * genders.length)]);\r",
+							"\r",
+							"// Status Random\r",
+							"\r",
+							"const statuses = [\"active\", \"inactive\"];\r",
+							"pm.variables.set(\"random_status\", statuses[Math.floor(Math.random() * genders.length)]);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\", \r\n  \"gender\": \"{{random_gender}}\",\r\n  \"status\": \"{{random_status}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "201 Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\", \r\n  \"gender\": \"{{random_gender}}\",\r\n  \"status\": \"{{random_status}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 20:47:34 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "107"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"eadeadc7f6300d2551e41f2404954e02\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "location",
+							"value": "https://gorest.co.in/public/v2/users/7787068"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "7a973bb7-c3e3-479d-a7e4-0fa998a9f6ee"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.054523"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=%2BIcsJHIawiPnnyqj8TtEanCTHOZB5Bzl4NohCtZZqXmJVdJM%2BQxzQni7Uhw%2BekS7oFWKs2OCN4lIKXZBsAAJqQLs5mdie4WkayHZjArxhGbc1H2lWBeVBKg9epbOBmQ%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "92404e20bfe457e6-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=46009&min_rtt=37019&rtt_var=17112&sent=100&recv=96&lost=0&retrans=0&sent_bytes=11768&recv_bytes=3606&delivery_rate=113486&cwnd=120&unsent_bytes=0&cid=3d05201fbd097a44&ts=87823&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 7787068,\n    \"name\": \"Miss Omar Cormier\",\n    \"email\": \"Shaylee31@hotmail.com\",\n    \"gender\": \"male\",\n    \"status\": \"active\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear Usuario Válido 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el cod de respuesta sea 201 \"Creado\".\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"// Validación: Verificar que el ID del usuario este presente en la respuesta.\r",
+							"pm.test(\"User ID is present\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.exist;  // El ID debe existir!\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							"\r",
+							"let responseData = pm.response.json();\r",
+							"// Guardamos el ID en la variable 'userId2' de la colección\r",
+							"pm.collectionVariables.set(\"userId2\", responseData.id);\r",
+							"\r",
+							"// Verificar en consola\r",
+							"console.log(\"Usuario creado con ID:\", responseData.id);;"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Genero Random\r",
+							"const genders = [\"male\", \"female\"];\r",
+							"pm.variables.set(\"random_gender\", genders[Math.floor(Math.random() * genders.length)]);\r",
+							"\r",
+							"// Status Random\r",
+							"\r",
+							"const statuses = [\"active\", \"inactive\"];\r",
+							"pm.variables.set(\"random_status\", statuses[Math.floor(Math.random() * genders.length)]);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\", \r\n  \"gender\": \"{{random_gender}}\",\r\n  \"status\": \"{{random_status}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "### Create New User\n\nThis endpoint allows you to create a new user by sending a POST request to the specified URL.\n\n#### Request Body\n\n- `name` (string) - The full name of the user.\n    \n- `email` (string) - The email address of the user.\n    \n- `gender` (string) - The gender of the user.\n    \n- `status` (string) - The status of the user.\n    \n\nExample:\n\n``` json\n{\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"gender\": \"male\",\n  \"status\": \"active\"\n}\n\n ```\n\n#### Response\n\nUpon successful creation, the endpoint returns a status code of 201 and a JSON object containing the details of the newly created user.\n\nExample Response:\n\n``` json\n{\n  \"id\": 123,\n  \"name\": \"John Doe\",\n  \"email\": \"johndoe@example.com\",\n  \"gender\": \"male\",\n  \"status\": \"active\"\n}\n\n ```"
+			},
+			"response": [
+				{
+					"name": "201 Created",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{$randomFullName}}\",\r\n  \"email\": \"{{$randomEmail}}\", \r\n  \"gender\": \"{{random_gender}}\",\r\n  \"status\": \"{{random_status}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 20:47:39 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "107"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"f749ac844174dbc48cfa1a554ea36892\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "location",
+							"value": "https://gorest.co.in/public/v2/users/7787069"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "a0823386-4230-4278-9caa-9f65182fffbc"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.049478"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=CJkmj2y5NbbH2sxhlW2aUE6sa%2FWELvbEqa%2B2qIv9aFlr32AmQV%2FX%2FzNJVbDbRAWY43fUJ2yoIKgvI%2FGkaXCRGhkAFGaWT6qxtFGwFVPjuYvnpK7ok7mQjpS5hM8KdpU%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "92404e3dbcfc57e6-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=44989&min_rtt=37019&rtt_var=14873&sent=107&recv=102&lost=0&retrans=0&sent_bytes=13334&recv_bytes=4101&delivery_rate=113486&cwnd=120&unsent_bytes=0&cid=3d05201fbd097a44&ts=92452&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 7787069,\n    \"name\": \"Florence Hyatt\",\n    \"email\": \"Marley_Zboncak@gmail.com\",\n    \"gender\": \"male\",\n    \"status\": \"active\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Crear Usuario Body Vacio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el cod de respuesta sea 404 \"Not Found\".\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Genero Random\r",
+							"const genders = [\"male\", \"female\"];\r",
+							"pm.variables.set(\"random_gender\", genders[Math.floor(Math.random() * genders.length)]);\r",
+							"\r",
+							"// Status Random\r",
+							"\r",
+							"const statuses = [\"active\", \"inactive\"];\r",
+							"pm.variables.set(\"random_status\", statuses[Math.floor(Math.random() * genders.length)]);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}}}/users",
+					"host": [
+						"{{URLBase}}}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "422 Unprocessable Entity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "Unprocessable Entity",
+					"code": 422,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 21:01:06 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "205"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "01632267-b583-4de8-a2da-564b9a5031e5"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.037659"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=VikZNvKXJkdIPDYUvtmE3VvKSrciGV10id31EFvW0R9GMJa4hh0zwboAaMwP7ihhOmxkp4PVQ118VBsPbjIW1ng1g4OFq80t4xDtZfLKjAp4Q8Rj2HI%2FHupPGrB4t%2FE%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "924061ef39806296-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=40745&min_rtt=39982&rtt_var=16520&sent=4&recv=5&lost=0&retrans=0&sent_bytes=2812&recv_bytes=695&delivery_rate=61271&cwnd=251&unsent_bytes=0&cid=97b0520315998cc8&ts=1232&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"field\": \"email\",\n        \"message\": \"can't be blank\"\n    },\n    {\n        \"field\": \"name\",\n        \"message\": \"can't be blank\"\n    },\n    {\n        \"field\": \"gender\",\n        \"message\": \"can't be blank, can be male of female\"\n    },\n    {\n        \"field\": \"status\",\n        \"message\": \"can't be blank\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Obtener Todos los Usuarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el cod de respuesta sea 200 \"OK\".\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 21:14:16 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"b86762a412141eda3649d8d14a04ddd6\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-links-current",
+							"value": "https://gorest.co.in/public/v2/users?page=1"
+						},
+						{
+							"key": "x-links-next",
+							"value": "https://gorest.co.in/public/v2/users?page=2"
+						},
+						{
+							"key": "x-links-previous",
+							"value": ""
+						},
+						{
+							"key": "x-pagination-limit",
+							"value": "10"
+						},
+						{
+							"key": "x-pagination-page",
+							"value": "1"
+						},
+						{
+							"key": "x-pagination-pages",
+							"value": "294"
+						},
+						{
+							"key": "x-pagination-total",
+							"value": "2934"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "8bbe1f7e-43a9-40be-97e1-bf6fdd3447f2"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.049265"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=oY8F5uNB0ue5Bwv1nv3J3X%2F3QXP101HRp00t2FYOU65T1pSKmNk1vrR25MvKuV7lQDA%2FLjcTJnEvohnvItRw661qfCtukPcm%2FUDgdGUF%2FrZwih%2B1sD8Rg%2FE8zlIPJJA%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "924075367b2ca67d-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=146613&min_rtt=145956&rtt_var=42229&sent=37&recv=35&lost=0&retrans=0&sent_bytes=5314&recv_bytes=967&delivery_rate=37822&cwnd=256&unsent_bytes=0&cid=f0b1005c4cdc96d1&ts=34235&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"id\": 7787077,\n        \"name\": \"Bertha Runolfsson\",\n        \"email\": \"Kiara94@gmail.com\",\n        \"gender\": \"female\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787076,\n        \"name\": \"Gerard Swift\",\n        \"email\": \"Lelia_Hermiston@gmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"inactive\"\n    },\n    {\n        \"id\": 7787073,\n        \"name\": \"Mrs. Sherman Koelpin\",\n        \"email\": \"Dominique.Huels53@gmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787069,\n        \"name\": \"Florence Hyatt\",\n        \"email\": \"Marley_Zboncak@gmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787068,\n        \"name\": \"Miss Omar Cormier\",\n        \"email\": \"Shaylee31@hotmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787067,\n        \"name\": \"Brent Kreiger\",\n        \"email\": \"Rhoda.Carroll30@gmail.com\",\n        \"gender\": \"female\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787066,\n        \"name\": \"Benjamin Metz\",\n        \"email\": \"Maxine.Kozey@hotmail.com\",\n        \"gender\": \"female\",\n        \"status\": \"inactive\"\n    },\n    {\n        \"id\": 7787065,\n        \"name\": \"Miss Robin Parker\",\n        \"email\": \"Alexander_Gutkowski15@gmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"inactive\"\n    },\n    {\n        \"id\": 7787064,\n        \"name\": \"Dr. Angelina Friesen\",\n        \"email\": \"Destin_OConnell@gmail.com\",\n        \"gender\": \"male\",\n        \"status\": \"active\"\n    },\n    {\n        \"id\": 7787025,\n        \"name\": \"Gustavo Schimmel\",\n        \"email\": \"Magdalen.Emmerich21@yahoo.com\",\n        \"gender\": \"male\",\n        \"status\": \"inactive\"\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "Obtener Usuario especifico 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 200 Ok.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test for presence of response body and its data\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+							"    pm.expect(pm.response.json()).to.have.property('id');\r",
+							"    pm.expect(pm.response.json()).to.have.property('name');\r",
+							"    pm.expect(pm.response.json()).to.have.property('email');\r",
+							"    pm.expect(pm.response.json()).to.have.property('gender');\r",
+							"    pm.expect(pm.response.json()).to.have.property('status');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId1}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId1}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId1}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 21:25:29 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"df8845cee65855f66d21738eda7faf12\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "5ec22fb6-fab6-40e7-87b0-e6ce8dc84507"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.038113"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=UHK5tDmIl%2Foa%2B0XZS6iNIrXPoR5W4m7kiSoltWzApbVf2uSVdNYAJfBlwJN1WYFiNW80QwClaEBBKxtfO%2Fvk%2Bg32WJoxha7woTOqnNfJPiRm47mJy7G4%2BGe5sj6PQYc%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "924085abfbfbb1f5-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=45903&min_rtt=37203&rtt_var=14597&sent=86&recv=81&lost=0&retrans=0&sent_bytes=10758&recv_bytes=2809&delivery_rate=107286&cwnd=106&unsent_bytes=0&cid=0d7a3e98540ebd2f&ts=75528&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 7787118,\n    \"name\": \"Jennifer Hansen\",\n    \"email\": \"Ursula_Fay53@yahoo.com\",\n    \"gender\": \"male\",\n    \"status\": \"inactive\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener Usuario especifico 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 200 Ok.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Test for presence of response body and its data\r",
+							"pm.test(\"Response body is not empty\", function () {\r",
+							"    pm.expect(pm.response.json()).to.not.be.empty;\r",
+							"    pm.expect(pm.response.json()).to.have.property('id');\r",
+							"    pm.expect(pm.response.json()).to.have.property('name');\r",
+							"    pm.expect(pm.response.json()).to.have.property('email');\r",
+							"    pm.expect(pm.response.json()).to.have.property('gender');\r",
+							"    pm.expect(pm.response.json()).to.have.property('status');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId2}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId2}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId2}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId2}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 21:27:07 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"cb315751b38d3034b0b3eec3ab04635b\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "370a7788-ea63-422b-af8d-da72894f2e15"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.061995"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=MYz7avvrRIycUaMVA3%2B9IPkZFQGEb0CX8ocxy3Enhs3Ma3EGiptGeUMqQOP3MSKcZu5Pur%2BfCYa2MJ0Gyn5AlOE9cE%2BaBBzy5P7ZMXUFm5LOkCKsGYJkaYEKL98ev8A%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240880dcc6e0323-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=43115&min_rtt=36458&rtt_var=18847&sent=30&recv=29&lost=0&retrans=0&sent_bytes=6070&recv_bytes=1475&delivery_rate=116070&cwnd=255&unsent_bytes=0&cid=9565ddc616a1b5e9&ts=23770&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 7787119,\n    \"name\": \"Bobby Greenholt\",\n    \"email\": \"Kayley90@yahoo.com\",\n    \"gender\": \"male\",\n    \"status\": \"inactive\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Obtener Usuario con Token Invalido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 401 Unauthorized.\r",
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "TokenInvalido",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "401 Unauthorized",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "Unauthorized",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 21:29:02 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "27"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-request-id",
+							"value": "3fc1659f-69d2-4a40-a373-03242e03bbcc"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.016212"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=Mku%2FzvILJz9CqfZ0Qi16IgIfw2lsjOkJAeBsQUR5q40nc2ceMwb3LSm107Ezfuj2N7nmkaigDR6dWg2yN5T2KyUCHoNL2t9J5%2F6fWCuoFAKeHilOGZB6GOKm0dgFqMY%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "92408ade0c6e0323-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=47641&min_rtt=36458&rtt_var=18752&sent=149&recv=143&lost=0&retrans=0&sent_bytes=10757&recv_bytes=2412&delivery_rate=116070&cwnd=255&unsent_bytes=0&cid=9565ddc616a1b5e9&ts=138973&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Invalid token\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar Nombre del Usuario 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 200 Ok.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Validación: Verificar que el nombre del usuario haya sido actualizado correctamente.\r",
+							"pm.test(\"User name is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Nuevo Nombre Usuario 1\");  // Nombre actualizado\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Nuevo Nombre Usuario 1\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId1}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Nuevo Nombre Usuario 1\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId1}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId1}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:10:22 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"4723849d4751c87900ab74f52b819bea\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "dd7cd7f9-15b4-4f5e-aa81-bf806a4b34ab"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.046551"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=EE%2BwAyNELvr8y8zL0Myf5z7kzNCjx9ShBZkarTSiaD3z%2Fh36ptWLYkIEzeQXoywW1fp7x%2BgoR54I%2FH9BHYK%2FViqsE2pcIPdX78bqjM6YC1psmC426xMKmPZ3N6UAreI%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240c7632ac2a42d-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=34780&min_rtt=34066&rtt_var=14204&sent=4&recv=5&lost=0&retrans=0&sent_bytes=2811&recv_bytes=747&delivery_rate=70981&cwnd=251&unsent_bytes=0&cid=22156822969fe2aa&ts=1157&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"Nuevo Nombre Usuario 1\",\n    \"id\": 7787118,\n    \"email\": \"Ursula_Fay53@yahoo.com\",\n    \"gender\": \"male\",\n    \"status\": \"inactive\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar Nombre del Usuario 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 200 Ok.\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Validación: Verificar que el nombre del usuario haya sido actualizado correctamente.\r",
+							"pm.test(\"User name is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Nuevo Nombre Usuario 2\");  // Nombre actualizado\r",
+							"});\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Nuevo Nombre Usuario 2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId2}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId2}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "200 OK",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Nuevo Nombre Usuario 2\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId2}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId2}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:16:10 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "max-age=0, private, must-revalidate"
+						},
+						{
+							"key": "etag",
+							"value": "W/\"d0ce7c925f992e0c886beff7aa8128c8\""
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "7e4d72be-2366-4be4-845c-d2bbf9b45022"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.128043"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=GtS8Mj0lcv8rgyCzqVieDSYQMVKJgilNEyw9iM7Q0JBT6qBxGHrBvhW59OtE4sVaqUDnYKjJMpNckQ5FCit8OvHx1WnbUOF9MzU3Pf8fl4yBHoWabC6vt1ffNHe38J0%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240cfe3cf2301c2-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=39568&min_rtt=38959&rtt_var=12062&sent=32&recv=30&lost=0&retrans=0&sent_bytes=4780&recv_bytes=1175&delivery_rate=133721&cwnd=255&unsent_bytes=0&cid=b318ab399cd18d36&ts=26550&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"Nuevo Nombre Usuario 2\",\n    \"id\": 7787119,\n    \"email\": \"Kayley90@yahoo.com\",\n    \"gender\": \"male\",\n    \"status\": \"inactive\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Actualizar Nombre de Usuario Invalido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 404 Not Found.\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Usuario Invalido Test\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/usuarioinvalido",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"usuarioinvalido"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "404 Not Found",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Usuario Invalido Test\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/usuarioinvalido",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"usuarioinvalido"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:21:19 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "32"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "5c5245b3-9c36-41fa-aeac-8a980af8cdf1"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.036438"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=z4XxYEo0vnVS6E%2F4sOf66Pa6FlRf6gqxOcH8v6r2seZCXjzI2rmQlaNWTeKTcbtdWvzfAT3aVXSCQaubcK6ScbFz67ISzQv2OqQnaGA8CsMed5QoA5pmfbn5i1RA%2FAk%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240d774afe43183-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=166005&min_rtt=148069&rtt_var=41174&sent=110&recv=110&lost=0&retrans=0&sent_bytes=8590&recv_bytes=2495&delivery_rate=19072&cwnd=247&unsent_bytes=0&cid=aef3b20ba6bf1b0f&ts=116893&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Resource not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Eliminar Usuario Creado 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 204 No Content.\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId1}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId1}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "204 No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId1}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId1}}"
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:28:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "d564f30d-b4cb-47e3-8c3e-3ce3804fada4"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.074238"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=yZyxQJHD9jC3UcCT0D9BbkBqVx5x0GeSr3AGLvsKqtkuiXmTJPInZXhZsSW3vTA4tB2L6DhLS3LoYJcOkNxibTJkiCS6tNyhQ3WP4qmZsQbzDlZ3i1chhVCPDc1st0M%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240e1aa7e397810-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=152236&min_rtt=150916&rtt_var=33788&sent=56&recv=55&lost=0&retrans=0&sent_bytes=6130&recv_bytes=1545&delivery_rate=18582&cwnd=253&unsent_bytes=0&cid=b30a89862052e8ba&ts=56523&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Eliminar Usuario Creado 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 204 No Content.\r",
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users/{{userId2}}",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users",
+						"{{userId2}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "204 No Content",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer cbe91a4b9ffc2dedef1053c76e401476eb30a57ed45bddc9557244a1dd186eec",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users/{{userId2}}",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{userId2}}"
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "plain",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:30:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-ratelimit-limit",
+							"value": "90"
+						},
+						{
+							"key": "x-ratelimit-remaining",
+							"value": "89"
+						},
+						{
+							"key": "x-ratelimit-reset",
+							"value": "1"
+						},
+						{
+							"key": "x-request-id",
+							"value": "1bdf25be-6337-4087-bbec-0031ea49a7a8"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.088778"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=jB4edK38l%2BZ%2F0ep1VKE6M%2FCIog2qe%2FwO6JGU5tyUAu1C30qlCQrD5jr5Wsn0hpWLThLmcFWTC0UFrL9oX7hka9eF%2BJ3xaut7AWYCtOmKyyiysbGmYwbWHZ09qq8mN7A%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240e4cdda5d7a84-GRU"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=152217&min_rtt=146910&rtt_var=58882&sent=4&recv=5&lost=0&retrans=0&sent_bytes=2810&recv_bytes=686&delivery_rate=19222&cwnd=252&unsent_bytes=0&cid=58fd9ab4c265715a&ts=1285&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Eliminar Usuario Creado 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validación: Verificar que el código de respuesta sea 404 Not Found.\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Test de rendimiento (menor a 500ms)\r",
+							"pm.test(\"Performance aceptable\", () => \r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{vault:go-rest-api:token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URLBase}}/users",
+					"host": [
+						"{{URLBase}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "404 Not Found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://gorest.co.in/public/v2/users",
+							"protocol": "https",
+							"host": [
+								"gorest",
+								"co",
+								"in"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 21 Mar 2025 22:34:47 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache"
+						},
+						{
+							"key": "feature-policy",
+							"value": "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'"
+						},
+						{
+							"key": "link",
+							"value": "</assets/application-908c2251d58be479b7fb209519b40235fa8b917357737796da9f4462eea8cabe.css>; rel=preload; as=style; nopush"
+						},
+						{
+							"key": "referrer-policy",
+							"value": "strict-origin-when-cross-origin"
+						},
+						{
+							"key": "vary",
+							"value": "Origin"
+						},
+						{
+							"key": "x-content-type-options",
+							"value": "nosniff"
+						},
+						{
+							"key": "x-download-options",
+							"value": "noopen"
+						},
+						{
+							"key": "x-frame-options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "x-permitted-cross-domain-policies",
+							"value": "none"
+						},
+						{
+							"key": "x-request-id",
+							"value": "3c96ff65-9896-4e2d-9aae-fa674450528a"
+						},
+						{
+							"key": "x-runtime",
+							"value": "0.025815"
+						},
+						{
+							"key": "x-xss-protection",
+							"value": "0"
+						},
+						{
+							"key": "cf-cache-status",
+							"value": "DYNAMIC"
+						},
+						{
+							"key": "Report-To",
+							"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=Yavg2aNAAcRkjsRGqN3RNEUiP2a6KhG%2FL2HCEEVjiEd0Em993nSfUvQf7UC2nzSW80%2Fu2Aaz2femFndUEHWImxyy6ZFiNMWcGd7ChWMeJl%2BuxIVaDtV8JMbuvaaxpKY%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "NEL",
+							"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+						},
+						{
+							"key": "Server",
+							"value": "cloudflare"
+						},
+						{
+							"key": "CF-RAY",
+							"value": "9240eb2b1e64f22f-GRU"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "br"
+						},
+						{
+							"key": "alt-svc",
+							"value": "h3=\":443\"; ma=86400"
+						},
+						{
+							"key": "server-timing",
+							"value": "cfL4;desc=\"?proto=TCP&rtt=38355&min_rtt=37511&rtt_var=11640&sent=38&recv=38&lost=0&retrans=0&sent_bytes=4566&recv_bytes=1053&delivery_rate=75284&cwnd=253&unsent_bytes=0&cid=81c8c22a1c37c8d0&ts=34544&x=0\""
+						}
+					],
+					"cookie": [],
+					"body": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"utf-8\" />\n        <meta content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" name=\"viewport\" />\n        <link href=\"/favicon.ico\" rel=\"icon\" type=\"image/x-icon\" />\n        <title>Page Not Found | GO REST</title>\n        <link rel=\"stylesheet\" href=\"/assets/application-908c2251d58be479b7fb209519b40235fa8b917357737796da9f4462eea8cabe.css\" media=\"all\" data-turbolinks-track=\"reload\" />\n        <script src=\"/packs/js/application-194ed409298f13f197d2.js\" data-turbolinks-track=\"reload\" defer=\"defer\"></script>\n        <script async=\"true\" crossorigin=\"anonymous\" src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4400401340006140\"></script>\n    </head>\n    <body>\n        <nav class=\"navbar navbar-expand-lg navbar-dark bg-dark sticky-top\">\n            <div class=\"container\">\n                <a class=\"navbar-brand\" href=\"/\">\n                    <i class=\"fas fa-exchange-alt\"></i> Go REST\n                </a>\n                <button aria-controls=\"AppNavBar\" aria-expanded=\"false\" aria-label=\"Toggle navigation\" class=\"navbar-toggler\" data-bs-target=\"#AppNavBar\" data-bs-toggle=\"collapse\" type=\"button\">\n                    <span class=\"navbar-toggler-icon\"></span>\n                </button>\n                <div class=\"collapse navbar-collapse\" id=\"AppNavBar\">\n                    <ul class=\"navbar-nav ms-auto\">\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" href=\"/qa\">\n                                <i class=\"fas fa-life-ring\"></i> Help\n                            </a>\n                        </li>\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" href=\"/rest-console\">\n                                <i class=\"fab fa-linux\"></i> Rest Console\n                            </a>\n                        </li>\n                        <li class=\"nav-item dropdown\">\n                            <a aria-expanded=\"false\" class=\"nav-link dropdown-toggle\" data-bs-toggle=\"dropdown\" href=\"#\" id=\"ToolsDropDown\" role=\"button\">\n                                <i class=\"fas fa-tools\"></i> Tools\n                            </a>\n                            <ul aria-labelledby=\"ToolsDropDown\" class=\"dropdown-menu\">\n                                <li class=\"\">\n                                    <a class=\"dropdown-item\" href=\"/tools/base64-encode-decode\">Base64 Encode/Decode</a>\n                                </li>\n                                <li class=\"\">\n                                    <a class=\"dropdown-item\" href=\"/tools/url-encode-decode\">Url Encode/Decode</a>\n                                </li>\n                                <li class=\"\">\n                                    <a class=\"dropdown-item\" href=\"/tools/gcode-translator\">G-Code Translator</a>\n                                </li>\n                            </ul>\n                        </li>\n                        <li class=\"nav-item\">\n                            <a class=\"nav-link\" href=\"/consumer/login\">Login</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </nav>\n        <div class=\"container pt-3\">\n            <style type=\"text/css\">.code-text code {color: #bdbdbd;display: block;}.code-text code b {color: #81a2be;font-weight: 900;}.code-text code em {color: #b294bb;font-style: unset;}.code-text code i {color: #b5bd68;}.code-text code span {color: #f0c674;}</style>\n            <div class=\"card text-white border-secondary bg-dark\">\n                <div class=\"card-header\">\n                    <h1 class=\"card-title text-warning\">\n                        <i class=\"fas fa-ghost text-white slide-right\"></i> HTTP: Not Found\n                    </h1>\n                </div>\n                <div class=\"card-body\">\n                    <h3 class=\"leaad code-text\">\n                        <code class=\"mb-3\">\n                            <span>this_page</span>.\n                            <em>not_found</em> = true\n                        </code>\n                    </h3>\n                    <p class=\"lead code-text\">\n                        <code class=\"mb-2\">\n                            <span>if</span>\n                            <b>you_spelt_it_wrong</b>\n                            <br />&nbsp;&nbsp;\n                            <span>try_again</span>\n                            <br />\n                        </code>\n                        <code class=\"mb-2\">\n                            <span>elsif \n                                <b>we_screwed_up</b>\n                            </span>\n                            <br />&nbsp;&nbsp;\n                            <em>print</em>\n                            <i>\"We're really sorry about that.\"</i>\n                            <br/>\n                        </code>\n                        <code class=\"mb-2\">\n                            <span>end</span>\n                        </code>\n                        <code class=\"mb-2\">\n                            <span>redirect_to</span>\n                            <em>home_page</em>\n                        </code>\n                    </p>\n                </div>\n                <div class=\"card-footer\">\n                    <p class=\"text-danger\">We are sorry, something went wrong. Please try again later.</p>\n                </div>\n            </div>\n        </div>\n        <hr class=\"mt-5\" />\n        <div class=\"container\">\n            <div class=\"footer\">\n                <ul class=\"list-inline\">\n                    <li class=\"list-inline-item\">&copy; Go Rest 2025</li>\n                    <li class=\"list-inline-item float-lg-end\">\n                        <a href=\"/privacy-policy\">Privacy Policy</a>\n                    </li>\n                    <li class=\"list-inline-item float-lg-end me-3\">\n                        <a href=\"/contact-us\">Contact Us</a>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    </body>\n</html>"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "URLBase",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "userId1",
+			"value": ""
+		},
+		{
+			"key": "userId2",
+			"value": ""
+		}
+	]
+}
