@@ -73,6 +73,6 @@ Se automatizó un flujo de registro exitoso en la web **Pushing IT** (`https://p
 
 ---
 
-> Entregado con dedicación, aprendizaje y esfuerzo 💻✨
->
-> Actualizo README completo con info de los desafíos.
+🎯 **Entregado con dedicación, aprendizaje y esfuerzo.**  
+¡Gracias por la oportunidad! 💻✨
+
